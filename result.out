@@ -1,0 +1,15 @@
+> db.DimProducts.aggregate([   {$lookup: {from: "factstore", localField: "ProductID", foreignField: "ProductID", as: "details"}},   {"$unwind":"$details"},   {$group: {_id: "$ProductCategoryName",avgOnHandQuantity: { $avg : "$details.OnHandQuantity" }}},     {$project: {"ProductCategoryName":"$ProductCategoryName","avgOnHandQuantity":"$avgOnHandQuantity",floorAvgOnHandQuantity: { $floor: "$avgOnHandQuantity" }}} ]);
+{ "_id" : "Cell phones", "avgOnHandQuantity" : 62.32336163476759, "floorAvgOnHandQuantity" : 62 }
+{ "_id" : "TV and Video", "avgOnHandQuantity" : 20.413036681950814, "floorAvgOnHandQuantity" : 20 }
+{ "_id" : "Home Appliances", "avgOnHandQuantity" : 20.336342483291062, "floorAvgOnHandQuantity" : 20 }
+{ "_id" : "Cameras and camcorders ", "avgOnHandQuantity" : 20.67926907486834, "floorAvgOnHandQuantity" : 20 }
+{ "_id" : "Music, Movies and Audio Books", "avgOnHandQuantity" : 18.86934555493405, "floorAvgOnHandQuantity" : 18 }
+{ "_id" : "Games and Toys", "avgOnHandQuantity" : 75.91057615846165, "floorAvgOnHandQuantity" : 75 }
+{ "_id" : "Computers", "avgOnHandQuantity" : 21.73863693874828, "floorAvgOnHandQuantity" : 21 }
+{ "_id" : "Audio", "avgOnHandQuantity" : 21.75158076962575, "floorAvgOnHandQuantity" : 21 }
+> db.DimStores.aggregate([   {$lookup: {from: "factstore", localField: "StoreID", foreignField: "StoreID", as: "details"}},   {"$unwind":"$details"},   {$group: {_id: "$StoreType",avgOnHandQuantity: { $avg : "$details.OnHandQuantity" }}},     {$project: {"StoreType":"$StoreType","avgOnHandQuantity":"$avgOnHandQuantity",floorAvgOnHandQuantity: { $floor: "$avgOnHandQuantity" }}} ]);
+{ "_id" : "Reseller", "avgOnHandQuantity" : 37.56381996182501, "floorAvgOnHandQuantity" : 37 }
+{ "_id" : "Online", "avgOnHandQuantity" : 47.97443884369705, "floorAvgOnHandQuantity" : 47 }
+{ "_id" : "Store", "avgOnHandQuantity" : 24.26701030622914, "floorAvgOnHandQuantity" : 24 }
+{ "_id" : "Catalog", "avgOnHandQuantity" : 59.49194060159919, "floorAvgOnHandQuantity" : 59 }
+>
