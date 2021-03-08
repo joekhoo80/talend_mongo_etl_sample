@@ -1,0 +1,21 @@
+use factstore;
+
+db.factstore.count();
+db.DimDates.count();
+db.DimStores.count();
+db.DimProducts.count();
+
+db.DimProducts.aggregate([  
+  {$lookup: {from: "factstore", localField: "ProductID", foreignField: "ProductID", as: "details"}},
+  {"$unwind":"$details"},
+  {$group: {_id: "$ProductCategoryName",avgOnHandQuantity: { $avg : "$details.OnHandQuantity" }}},  
+  {$project: {"ProductCategoryName":"$ProductCategoryName","avgOnHandQuantity":"$avgOnHandQuantity",floorAvgOnHandQuantity: { $floor: "$avgOnHandQuantity" }}}
+]);
+
+db.DimStores.aggregate([  
+  {$lookup: {from: "factstore", localField: "StoreID", foreignField: "StoreID", as: "details"}},
+  {"$unwind":"$details"},
+  {$group: {_id: "$StoreType",avgOnHandQuantity: { $avg : "$details.OnHandQuantity" }}},  
+  {$project: {"StoreType":"$StoreType","avgOnHandQuantity":"$avgOnHandQuantity",floorAvgOnHandQuantity: { $floor: "$avgOnHandQuantity" }}}
+]);
+
